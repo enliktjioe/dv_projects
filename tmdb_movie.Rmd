@@ -1,0 +1,53 @@
+---
+title: "TMDB Movie - Data Visualisation"
+author: "Enlik Tjioe"
+date: "24 January 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+```{r}
+library(ggplot2)
+library(GGally)
+library(ggthemes)
+library(ggpubr)
+library(leaflet)
+library(lubridate)
+```
+
+## Pre-Processing Data
+Workflow:
+* Reading your data
+* Take a peek at your data
+* Inspect your structure of data
+* Formulate questions (strategic business value)
+* Answer questions efficiently
+
+Data Visualization Data (csv, database, images) -> preprocessing -> eda (exploratory data analysis) -> visualization / plotting
+
+Core Techniques for EDA: `table() - table(insurance$gender)` for one-dimensional table - `table(insurance$gender, insurance$existingcust)` for 2-dimensional - `table("gender"=insurance$gender) - pie(table(x))`
+
+xtabs() - Stands for cross-tabulation - format: `xtabs(formula=claims ~ category, data=insurance)` - by default, it uses the `sum()` as the breakdown - `plot(xtabs(x))`
+
+aggregate() - In terms of format, very similar to xtabs except it takes an additional parameter - format: `xtabs(formula=claims ~ category, data=insurance, FUN=mean)` - If you find it useful, you can order the output by saving it as a `data.frame(x)`
+
+### Pre-processing
+
+```{r}
+mv <- read.csv("data_input/tmdb_5000_movies.csv", stringsAsFactors = FALSE)
+str(mv)
+
+mv[,c("original_language", "status")] <- lapply(mv[,c("original_language", "status")], as.factor)
+mv$release_date <- ymd(mv$release_date)
+```
+
+### Exploratory Data Analysis
+```{r}
+
+```
+
+
