@@ -9,18 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Libraries
+## 1. Libraries
 ```{r}
 library(ggplot2)
-library(GGally)
-library(ggthemes)
-library(ggpubr)
-library(leaflet)
 library(lubridate)
 ```
 
-## Pre-Processing Data
+## 2. Kaggle Dataset
+[TMBD 5000 Movie Dataset](https://www.kaggle.com/tmdb/tmdb-movie-metadata)
+
+## 3. Pre-Processing Data
 Workflow:
+
 * Reading your data
 * Take a peek at your data
 * Inspect your structure of data
@@ -29,13 +29,7 @@ Workflow:
 
 Data Visualization Data (csv, database, images) -> preprocessing -> eda (exploratory data analysis) -> visualization / plotting
 
-Core Techniques for EDA: `table() - table(insurance$gender)` for one-dimensional table - `table(insurance$gender, insurance$existingcust)` for 2-dimensional - `table("gender"=insurance$gender) - pie(table(x))`
-
-xtabs() - Stands for cross-tabulation - format: `xtabs(formula=claims ~ category, data=insurance)` - by default, it uses the `sum()` as the breakdown - `plot(xtabs(x))`
-
-aggregate() - In terms of format, very similar to xtabs except it takes an additional parameter - format: `xtabs(formula=claims ~ category, data=insurance, FUN=mean)` - If you find it useful, you can order the output by saving it as a `data.frame(x)`
-
-### Pre-processing
+### 3.1 Pre-processing
 `mv` is a dataframe with 4803 observations and 20 variables
 ```{r}
 mv <- read.csv("data_input/tmdb_5000_movies.csv", stringsAsFactors = FALSE)
@@ -45,27 +39,39 @@ mv[,c("original_language", "status")] <- lapply(mv[,c("original_language", "stat
 mv$release_date <- ymd(mv$release_date)
 ```
 
-### Exploratory Data Analysis
+### 3.2 Exploratory Data Analysis
 Start with question:
 What is top 10 movie with big revenue? And please visualize it.
 ```{r}
 top10 <- head(mv[order(mv$revenue, decreasing = TRUE), c("title", "revenue")], n = 10)
 top10
+rm(mv) #remove unused data to preserve memory
 ```
 
-### Data Visualization with ggplot2
+### 3.3 Data Visualization with ggplot2
 
 ```{r}
 top10$title <- reorder(top10$title, as.numeric(top10$revenue))
 
 # Formating in Billions
-top10$revenue <- paste(format(round(top10$revenue / 1e9, 1), trim = TRUE), "B")
+top10$revenue <- paste(format(round(top10$revenue / 1e9, 2), trim = TRUE), "B")
 
 ggplot(top10, aes(title, revenue)) +
-  geom_col() +
+  geom_col(position = "dodge", aes(fill = revenue)) +
   coord_flip() +
-  labs(x = "Movie Title", y = "Revenues in USD", title = "Top 10 Movie with Most Revenues All Time")
+  labs(x = "Movie Name", y = "Revenues in USD", title = "Top 10 Movie with Most Revenues All Time")
 
 ```
 
+## 4. Final Thoughts
+This is my first doing data visualization using Kaggle dataset
+
+What I Learn?
+
+* Doing pre-processing raw data
+* Using lubridate() for date formatting
+* Subsetting data based on column that will be used *title* and *revenue*
+* Reordering data based on most revenue and limit it to 10 rows
+* Formating revenue numeric values into **Billion(B)** format
+* Data visualization with ggplot2 using `geom_col()` + `coord_flip()` + `labs()`
 

@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/460869/8f3cb17cda694227aa24d80f9a75131c
+bundleId: https://api.rpubs.com/api/v1/document/460869/8f3cb17cda694227aa24d80f9a75131c
+url: http://rpubs.com/enlik/460869/edit
+when: 1548309629.58343
