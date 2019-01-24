@@ -36,17 +36,33 @@ xtabs() - Stands for cross-tabulation - format: `xtabs(formula=claims ~ category
 aggregate() - In terms of format, very similar to xtabs except it takes an additional parameter - format: `xtabs(formula=claims ~ category, data=insurance, FUN=mean)` - If you find it useful, you can order the output by saving it as a `data.frame(x)`
 
 ### Pre-processing
-
+`mv` is a dataframe with 4803 observations and 20 variables
 ```{r}
 mv <- read.csv("data_input/tmdb_5000_movies.csv", stringsAsFactors = FALSE)
-str(mv)
+# str(mv)
 
 mv[,c("original_language", "status")] <- lapply(mv[,c("original_language", "status")], as.factor)
 mv$release_date <- ymd(mv$release_date)
 ```
 
 ### Exploratory Data Analysis
+Start with question:
+What is top 10 movie with big revenue? And please visualize it.
 ```{r}
+top10 <- head(mv[order(mv$revenue, decreasing = TRUE), c("title", "revenue")], n = 10)
+
+# Formating in Billions
+top10$revenue <- paste(format(round(top10$revenue / 1e9, 1), trim = TRUE), "B")
+
+```
+
+### Data Visualization with ggplot2
+
+```{r}
+ggplot(top10, aes(title, revenue)) +
+  geom_col() +
+  coord_flip() +
+  labs(x = "Movie Title", y = "Revenues in USD", title = "Top 10 Movie with Most Revenues All Time")
 
 ```
 
