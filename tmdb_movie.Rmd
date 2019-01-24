@@ -50,15 +50,17 @@ Start with question:
 What is top 10 movie with big revenue? And please visualize it.
 ```{r}
 top10 <- head(mv[order(mv$revenue, decreasing = TRUE), c("title", "revenue")], n = 10)
-
-# Formating in Billions
-top10$revenue <- paste(format(round(top10$revenue / 1e9, 1), trim = TRUE), "B")
-
+top10
 ```
 
 ### Data Visualization with ggplot2
 
 ```{r}
+top10$title <- reorder(top10$title, as.numeric(top10$revenue))
+
+# Formating in Billions
+top10$revenue <- paste(format(round(top10$revenue / 1e9, 1), trim = TRUE), "B")
+
 ggplot(top10, aes(title, revenue)) +
   geom_col() +
   coord_flip() +
